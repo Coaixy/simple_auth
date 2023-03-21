@@ -3,6 +3,7 @@ package ren.lawliet.java;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 import org.java_websocket.WebSocket;
@@ -36,7 +37,7 @@ public class Server extends WebSocketServer{
                 if(data.length == 2){
                     try {
                         System.out.println(Db.getPwd(data[0]));
-                        if (Db.getPwd(data[0]) != "") {
+                        if (Db.getPwd(data[0]).equals("")) {
                             ws.send("false");
                         }else{
                             ws.send("true");
@@ -47,7 +48,15 @@ public class Server extends WebSocketServer{
                 }
             }
             case "/login":{
-                
+                if(data.length == 2){
+                    try {
+                        if (Db.getPwd(data[0]).equals(Db.md5(data[1]))) {
+                            ws.send("true");
+                        }else{
+                            ws.send("false");
+                        }
+                    } catch (NoSuchAlgorithmException | IOException e) {}
+                }
             }
         }
     }
