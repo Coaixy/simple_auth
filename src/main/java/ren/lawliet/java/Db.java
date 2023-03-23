@@ -9,8 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import javax.print.attribute.standard.OutputDeviceAssigned;
+import java.util.Random;
 
 public class Db {
     static File file = null;
@@ -55,6 +54,11 @@ public class Db {
             osw.close();
             fos.close();
         }
-
     }
+    public static String makeToken() throws NoSuchAlgorithmException {
+        String token = (System.currentTimeMillis() + new Random().nextInt(999999999)) + "";
+        token = md5(token);
+        return token;
+    }
+
 }
