@@ -37,12 +37,15 @@ public class Server extends WebSocketServer{
                 if(data.length == 2){
                     try {
                         System.out.println(Db.getPwd(data[0]));
-                        if (Db.getPwd(data[0]).equals("")) {
+                        if (!Db.getPwd(data[0]).equals("")) {
                             ws.send("false");
                         }else{
                             ws.send("true");
+                            Db.addData(data[0]+"-"+Db.md5(data[1]));
                         }
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     }
                 }

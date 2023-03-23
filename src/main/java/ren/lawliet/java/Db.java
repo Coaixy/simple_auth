@@ -1,12 +1,16 @@
 package ren.lawliet.java;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import javax.print.attribute.standard.OutputDeviceAssigned;
 
 public class Db {
     static File file = null;
@@ -36,4 +40,21 @@ public class Db {
         return hashedPwd;
     }
 
+    public static void addData(String str) throws IOException{
+        FileOutputStream fos = null;
+        OutputStreamWriter osw = null;
+        try{
+            fos = new FileOutputStream(file,true);
+            osw = new OutputStreamWriter(fos,"UTF-8");
+            osw.write(str);
+            osw.write("\n");
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            osw.close();
+            fos.close();
+        }
+
+    }
 }
