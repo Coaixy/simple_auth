@@ -20,7 +20,7 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket arg0, int arg1, String arg2, boolean arg3) {
-        System.out.println(arg0 + "离开");
+        System.out.println(arg0.getLocalSocketAddress() +"-"+ "离开");
     }
 
     @Override
@@ -50,14 +50,11 @@ public class Server extends WebSocketServer {
     @Override
     public void onMessage(WebSocket ws, String msg) {
         var route = ws.getResourceDescriptor();
-        System.out.println(
-                ws.getRemoteSocketAddress().getAddress() + "-" + ws.getRemoteSocketAddress().getPort() + "-" + msg);
         var data = msg.split("&");
         switch (route) {
             case "/reg": {
                 if (data.length == 2) {
                     try {
-                        System.out.println(Db.getPwd(data[0]));
                         if (!Db.getPwd(data[0]).equals("")) {
                             ws.send("false");
                         } else {
@@ -88,6 +85,10 @@ public class Server extends WebSocketServer {
                 break;
             }
             default: {
+                String token = data[0];
+                if (tokens.containsKey(token)) {
+                    tokens.get(token).send("true");
+                }
             }
         }
     }

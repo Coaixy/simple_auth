@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+    />
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+  </head>
+  <body>
+    <!-- 固定标签 -->
+    <div class="mdui-textfield">
+      <i class="mdui-icon material-icons">account_circle</i>
+      <label class="mdui-textfield-label">User name</label>
+      <input class="mdui-textfield-input" id="uid"  type="text" />
+    </div>
+
+    <!-- 禁用状态 -->
+    <div class="mdui-textfield">
+      <i class="mdui-icon material-icons">lock</i>
+      <input class="mdui-textfield-input" type="text" id="pwd" placeholder="Password" />
+    </div>
+
+    <div class="mdui-col">
+      <button
+        class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick="login()"
+      >
+        登录
+      </button>
+    </div>
+
+    <script>
+        let ws = new WebSocket('ws://127.0.0.1:8080/login')
+        ws.onopen = (evt)=>{
+            console.log('开启成功')
+        }
+        ws.onmessage = (evt)=>{
+            if (evt.data == "true") {
+                alert('登录成功')
+            }else{
+                alert('登录失败')
+            }
+        }
+
+        let login = ()=>{
+            let uid = document.querySelector("#uid").value
+            let pwd = document.querySelector("#pwd").value
+            ws.send(uid+"&"+pwd)
+        }
+    </script>
+  </body>
+</html>
